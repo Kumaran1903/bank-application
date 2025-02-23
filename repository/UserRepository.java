@@ -38,4 +38,15 @@ public class UserRepository {
         User user = new User(username, password, contactNumber, "user", 500.0);
         return users.add(user);
     }
+
+    public Double checkBalance(String username) {
+        List<User> list = users.stream()
+                .filter(user -> user.getUsername().equals(username))
+                .collect(Collectors.toList());
+        if (!list.isEmpty()) {
+            return list.get(0).getAccountBalance();
+        } else {
+            return null;
+        }
+    }
 }

@@ -14,11 +14,13 @@ class Main {
             String username = sc.next();
             System.out.println("Enter your password ");
             String password = sc.next();
+
             User user = userService.login(username, password);
+            
             if (user != null && user.getRole().equals("admin")) {
                 initAdmin();
             } else if (user != null && user.getRole().equals("user")) {
-                initCustomer();
+                initCustomer(user);
             } else {
                 System.out.println("Login failed");
             }
@@ -28,6 +30,7 @@ class Main {
     private static void initAdmin() {
         boolean flag = true;
         while (flag) {
+            System.out.println("-------------------------------------------------------------");
             System.out.println("1. Exit/Log out");
             System.out.println("2. Create a Customer account");
             int selectedOption = sc.nextInt();
@@ -45,21 +48,30 @@ class Main {
         }
     }
 
-    private static void initCustomer() {
+    private static void initCustomer(User user) {
         boolean flag = true;
         while (flag) {
+            System.out.println("-------------------------------------------------------------");
             System.out.println("1. Exit/Log out");
+            System.out.println("2. Check Balance");
             int selectedOption = sc.nextInt();
             switch (selectedOption) {
                 case 1:
                     flag = false;
                     System.out.println("You are Logged out successfully....");
                     break;
+                case 2:
+                    Double balance = userService.checkBalance(user.getUsername());
+                    if (balance != null) {
+                        System.out.println("Your balance is " + balance);
+                    } else {
+                        System.out.println("Failed to get balance");
+                    }
+                    break;
                 default:
                     System.out.println("Invalid option");
             }
         }
-
     }
 
     private static void addCustomer() {
