@@ -1,5 +1,6 @@
 package main;
 
+import entity.User;
 import java.util.Scanner;
 import service.UserService;
 
@@ -8,10 +9,16 @@ class Main {
 
     public static void main(String[] args) {
         UserService userService = new UserService();
-        // System.out.println("Enter your username ");
-        // String username = sc.nextLine();
-        // System.out.println("Enter your password ");
-        // String password = sc.nextLine();
-        userService.printUser();
+        System.out.println("Enter your username ");
+        String username = sc.nextLine();
+        System.out.println("Enter your password ");
+        String password = sc.nextLine();
+        // userService.printUser();
+        User user = userService.login(username, password);
+        if (user != null) {
+            System.out.println("You are Logged in successfully");
+        } else {
+            System.out.println("Login failed");
+        }
     }
 }

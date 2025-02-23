@@ -2,7 +2,9 @@ package repository;
 
 import entity.User;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserRepository {
     private static Set<User> users = new HashSet<>();
@@ -19,5 +21,16 @@ public class UserRepository {
 
     public void printUser() {
         System.out.println(users);
+    }
+
+    public User login(String username, String password) {
+        List<User> list = users.stream()
+                .filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password))
+                .collect(Collectors.toList());
+        if (!list.isEmpty()) {
+            return list.get(0);
+        } else {
+            return null;
+        }
     }
 }
