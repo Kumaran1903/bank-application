@@ -31,11 +31,14 @@ class Main {
 
     private static void initAdmin() {
         boolean flag = true;
+        String userId = "";
         while (flag) {
             System.out.println(
                     "-------------------------------------------------------------------------------------------------------");
             System.out.println("1. Exit/Log out");
             System.out.println("2. Create a Customer account");
+            System.out.println("3. See all Transactions");
+            System.out.println("4. Check Bank Balance");
             int selectedOption = sc.nextInt();
             switch (selectedOption) {
                 case 1:
@@ -44,6 +47,21 @@ class Main {
                     break;
                 case 2:
                     addCustomer();
+                    break;
+                case 3:
+                    System.out.println("Enter userId");
+                    userId = sc.next();
+                    printTransactions(userId);
+                    break;
+                case 4:
+                    System.out.println("Enter userId");
+                    userId = sc.next();
+                    Double balance = userService.checkBalance(userId);
+                    if (balance != null) {
+                        System.out.println("Bank balance is " + balance);
+                    } else {
+                        System.out.println("Failed to get balance");
+                    }
                     break;
                 default:
                     System.out.println("Invalid option");
