@@ -80,10 +80,10 @@ public class UserRepository {
             Double finalbalance = balance - amount;
             users.remove(user);
             user.setAccountBalance(finalbalance);
-            Transaction transaction = new Transaction(LocalDate.now(), senderId, amount, "debit", balance, finalbalance,
-                    receiverId);
+            Transaction transaction = new Transaction(LocalDate.now(), receiverId, amount, "Debit", balance,
+                    finalbalance,
+                    senderId);
             transactions.add(transaction);
-            System.out.println(transaction);
             return users.add(user);
         }
         return false;
@@ -99,13 +99,28 @@ public class UserRepository {
             Double finalbalance = balance + amount;
             users.remove(user);
             user.setAccountBalance(finalbalance);
-            Transaction transaction = new Transaction(LocalDate.now(), receiverId, amount, "credit", balance,
+            Transaction transaction = new Transaction(LocalDate.now(), senderId, amount, "Credit", balance,
                     finalbalance,
-                    senderId);
+                    receiverId);
             transactions.add(transaction);
-            System.out.println(transaction);
             return users.add(user);
         }
         return false;
+    }
+
+    public void printTransactions(String username) {
+        List<Transaction> list = transactions.stream()
+                .filter(transaction -> transaction.getTransactionPerfomedBy().equals(username))
+                .collect(Collectors.toList());
+        System.out.println("Date\t\tUserId\t\tAmount\t\tType\t\tInitial Balance\t\tFinal Balance");
+        System.out.println(
+                "-------------------------------------------------------------------------------------------------------");
+        for (Transaction t : list) {
+            System.out
+                    .println(t.getDate() + "\t" + t.getTransactionUserId() + "\t\t" + t.getTransactionAmount()
+                            + "\t\t"
+                            + t.getTransactionType() + "\t\t" + t.getInitialBalance() + "\t\t\t" + t.getFinalBalance());
+        }
+
     }
 }

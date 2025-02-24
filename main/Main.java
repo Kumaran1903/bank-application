@@ -10,6 +10,8 @@ class Main {
 
     public static void main(String[] args) {
         while (true) {
+            System.out.println(
+                    "--------------------------------------------------Welcome----------------------------------------------");
             System.out.println("Enter your username ");
             String username = sc.next();
             System.out.println("Enter your password ");
@@ -30,7 +32,8 @@ class Main {
     private static void initAdmin() {
         boolean flag = true;
         while (flag) {
-            System.out.println("-------------------------------------------------------------");
+            System.out.println(
+                    "-------------------------------------------------------------------------------------------------------");
             System.out.println("1. Exit/Log out");
             System.out.println("2. Create a Customer account");
             int selectedOption = sc.nextInt();
@@ -51,10 +54,12 @@ class Main {
     private static void initCustomer(User user) {
         boolean flag = true;
         while (flag) {
-            System.out.println("-------------------------------------------------------------");
+            System.out.println(
+                    "-------------------------------------------------------------------------------------------------------");
             System.out.println("1. Exit/Log out");
             System.out.println("2. Check Balance");
             System.out.println("3. Transfer Money");
+            System.out.println("4. See all Transactions");
             int selectedOption = sc.nextInt();
             switch (selectedOption) {
                 case 1:
@@ -72,6 +77,9 @@ class Main {
                 case 3:
                     transferMoney(user);
                     break;
+                case 4:
+                    printTransactions(user.getUsername());
+                    break;
                 default:
                     System.out.println("Invalid option");
             }
@@ -79,6 +87,8 @@ class Main {
     }
 
     private static void addCustomer() {
+        System.out.println(
+                "-------------------------------------------------------------------------------------------------------");
         System.out.println("Enter username");
         String username = sc.next();
         System.out.println("Enter password");
@@ -94,6 +104,8 @@ class Main {
     }
 
     private static void transferMoney(User userDetails) {
+        System.out.println(
+                "-------------------------------------------------------------------------------------------------------");
         System.out.println("Enter userId");
         String userId = sc.next();
         User user = userService.getUser(userId);
@@ -114,5 +126,11 @@ class Main {
         } else {
             System.out.println("User not found");
         }
+    }
+
+    private static void printTransactions(String username) {
+        System.out.println(
+                "-------------------------------------------------------------------------------------------------------");
+        userService.printTransactions(username);
     }
 }

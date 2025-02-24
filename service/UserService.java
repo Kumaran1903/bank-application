@@ -27,4 +27,7 @@ public class UserService {
     public boolean transferMoney(String senderId, String receiverId, Double amount) {
         return userRepository.transferMoney(senderId, receiverId, amount);
     }
+    public void printTransactions(String username) {
+        userRepository.printTransactions(username);
+    }
 }
