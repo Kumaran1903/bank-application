@@ -16,7 +16,7 @@ class Main {
             String password = sc.next();
 
             User user = userService.login(username, password);
-            
+
             if (user != null && user.getRole().equals("admin")) {
                 initAdmin();
             } else if (user != null && user.getRole().equals("user")) {
@@ -54,6 +54,7 @@ class Main {
             System.out.println("-------------------------------------------------------------");
             System.out.println("1. Exit/Log out");
             System.out.println("2. Check Balance");
+            System.out.println("3. Transfer Money");
             int selectedOption = sc.nextInt();
             switch (selectedOption) {
                 case 1:
@@ -67,6 +68,9 @@ class Main {
                     } else {
                         System.out.println("Failed to get balance");
                     }
+                    break;
+                case 3:
+                    transferMoney(user);
                     break;
                 default:
                     System.out.println("Invalid option");
@@ -87,5 +91,29 @@ class Main {
         } else {
             System.out.println("Customer creation is failed");
         }
+    }
+
+    private static void transferMoney(User userDetails) {
+        System.out.println("Enter userId");
+        String userId = sc.next();
+        User user = userService.getUser(userId);
+        if (user != null) {
+            System.out.println("Enter amount");
+            Double amount = sc.nextDouble();
+            Double balance = userService.checkBalance(userDetails.getUsername());
+            if (balance != null && balance >= amount) {
+                boolean result = userService.transferMoney(userDetails.getUsername(), userId, amount);
+                if (result) {
+                    System.out.println("Money transfer is successfully");
+                } else {
+                    System.out.println("Money transfer is failed");
+                }
+            } else {
+                System.out.println("Insufficient balance");
+            }
+        } else {
+            System.out.println("User not found");
+        }
+
     }
 }
