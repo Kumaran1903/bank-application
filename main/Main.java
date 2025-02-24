@@ -114,6 +114,5 @@ class Main {
         } else {
             System.out.println("User not found");
         }
-
     }
 }

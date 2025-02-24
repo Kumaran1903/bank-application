@@ -1,6 +1,9 @@
 package repository;
 
+import entity.Transaction;
 import entity.User;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +11,7 @@ import java.util.stream.Collectors;
 
 public class UserRepository {
     private static Set<User> users = new HashSet<>();
+    private static List<Transaction> transactions = new ArrayList<>();
     static {
         User user1 = new User("admin", "admin", "1234567890", "admin", 0.0);
         User user2 = new User("juli", "juli", "0987654321", "user", 1000.0);
@@ -17,7 +21,7 @@ public class UserRepository {
         users.add(user2);
         users.add(user3);
         // users.add(user4);
-    }           
+    }
 
     public void printUser() {
         System.out.println(users);
@@ -61,12 +65,12 @@ public class UserRepository {
     }
 
     public boolean transferMoney(String senderId, String receiverId, Double amount) {
-        boolean isDebit = debit(senderId, amount);
-        boolean isCredit = credit(receiverId, amount);
+        boolean isDebit = debit(senderId, amount, receiverId);
+        boolean isCredit = credit(receiverId, amount, senderId);
         return isDebit && isCredit;
     }
 
-    public boolean debit(String senderId, Double amount) {
+    public boolean debit(String senderId, Double amount, String receiverId) {
         List<User> list = users.stream()
                 .filter(user -> user.getUsername().equals(senderId))
                 .collect(Collectors.toList());
@@ -76,12 +80,16 @@ public class UserRepository {
             Double finalbalance = balance - amount;
             users.remove(user);
             user.setAccountBalance(finalbalance);
+            Transaction transaction = new Transaction(LocalDate.now(), senderId, amount, "debit", balance, finalbalance,
+                    receiverId);
+            transactions.add(transaction);
+            System.out.println(transaction);
             return users.add(user);
         }
         return false;
     }
 
-    public boolean credit(String receiverId, Double amount) {
+    public boolean credit(String receiverId, Double amount, String senderId) {
         List<User> list = users.stream()
                 .filter(user -> user.getUsername().equals(receiverId))
                 .collect(Collectors.toList());
@@ -91,6 +99,11 @@ public class UserRepository {
             Double finalbalance = balance + amount;
             users.remove(user);
             user.setAccountBalance(finalbalance);
+            Transaction transaction = new Transaction(LocalDate.now(), receiverId, amount, "credit", balance,
+                    finalbalance,
+                    senderId);
+            transactions.add(transaction);
+            System.out.println(transaction);
             return users.add(user);
         }
         return false;
