@@ -4,23 +4,24 @@ import entity.Transaction;
 import entity.User;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserRepository {
     private static Set<User> users = new HashSet<>();
     private static List<Transaction> transactions = new ArrayList<>();
+    private static Map<String, Boolean> chequeBookRequest = new HashMap<>();
     static {
         User user1 = new User("admin", "admin", "1234567890", "admin", 0.0);
         User user2 = new User("juli", "juli", "0987654321", "user", 1000.0);
         User user3 = new User("luffy", "luffy", "0987654322", "user", 500.0);
-        // User user4 = new User("user4", "user3", "0987654322", "user", 2000.0);
         users.add(user1);
         users.add(user2);
         users.add(user3);
-        // users.add(user4);
     }
 
     public void printUser() {
@@ -122,5 +123,27 @@ public class UserRepository {
                             + t.getTransactionType() + "\t\t" + t.getInitialBalance() + "\t\t\t" + t.getFinalBalance());
         }
 
+    }
+
+    public void raiseChequeBookRequest(String username) {
+        chequeBookRequest.put(username, false);
+    }
+
+    public Map<String, Boolean> getAllChecqueBookRequest() {
+        return chequeBookRequest;
+    }
+
+    public List<String> getUserIdForChequeBookRequest() {
+        List<String> list = new ArrayList<>();
+        for (var x : chequeBookRequest.entrySet()) {
+            if (!x.getValue()) {
+                list.add(x.getKey());
+            }
+        }
+        return list;
+    }
+
+    public void approveChequeBookRequest(String userId) {
+        chequeBookRequest.put(userId, true);
     }
 }

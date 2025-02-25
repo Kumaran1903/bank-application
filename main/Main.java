@@ -1,10 +1,12 @@
 package main;
 
 import entity.User;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import service.UserService;
 
-class Main {
+class Main {    
     private static Scanner sc = new Scanner(System.in);
     private static UserService userService = new UserService();
 
@@ -39,6 +41,9 @@ class Main {
             System.out.println("2. Create a Customer account");
             System.out.println("3. See all Transactions");
             System.out.println("4. Check Bank Balance");
+            System.out.println("5. Approve cheque book request");
+            System.out.println(
+                    "-------------------------------------------------------------------------------------------------------");
             int selectedOption = sc.nextInt();
             switch (selectedOption) {
                 case 1:
@@ -63,6 +68,19 @@ class Main {
                         System.out.println("Failed to get balance");
                     }
                     break;
+                case 5:
+                    List<String> userIds = getUserIdForChequeBookRequest();
+                    if (userIds.isEmpty()) {
+                        System.out.println("No cheque book request found");
+                        break;
+                    }
+                    System.out.println("Select userId to approve cheque book request");
+                    System.out.print(userIds);
+                    System.out.println("\nEnter userId");
+                    userId = sc.next();
+                    approveChequeBookRequest(userId);
+                    System.out.println("Cheque book request is approved successfully");
+                    break;
                 default:
                     System.out.println("Invalid option");
             }
@@ -78,6 +96,9 @@ class Main {
             System.out.println("2. Check Balance");
             System.out.println("3. Transfer Money");
             System.out.println("4. See all Transactions");
+            System.out.println("5. Raise cheque book request");
+            System.out.println(
+                    "-------------------------------------------------------------------------------------------------------");
             int selectedOption = sc.nextInt();
             switch (selectedOption) {
                 case 1:
@@ -98,6 +119,18 @@ class Main {
                 case 4:
                     printTransactions(user.getUsername());
                     break;
+                case 5:
+                    Map<String, Boolean> AllChecqueBookRequest = getAllChecqueBookRequest();
+                    if (AllChecqueBookRequest.containsKey(user.getUsername())
+                            && AllChecqueBookRequest.get(user.getUsername())) {
+                        System.out.println("Cheque book request is already raised and approved");
+                    } else if (AllChecqueBookRequest.containsKey(user.getUsername())
+                            && !AllChecqueBookRequest.get(user.getUsername())) {
+                        System.out.println("Cheque book request is already raised and waiting for approval");
+                    } else {
+                        raiseChequeBookRequest(user.getUsername());
+                    }
+                    break;
                 default:
                     System.out.println("Invalid option");
             }
@@ -105,8 +138,6 @@ class Main {
     }
 
     private static void addCustomer() {
-        System.out.println(
-                "-------------------------------------------------------------------------------------------------------");
         System.out.println("Enter username");
         String username = sc.next();
         System.out.println("Enter password");
@@ -122,8 +153,6 @@ class Main {
     }
 
     private static void transferMoney(User userDetails) {
-        System.out.println(
-                "-------------------------------------------------------------------------------------------------------");
         System.out.println("Enter userId");
         String userId = sc.next();
         User user = userService.getUser(userId);
@@ -147,8 +176,23 @@ class Main {
     }
 
     private static void printTransactions(String username) {
-        System.out.println(
-                "-------------------------------------------------------------------------------------------------------");
         userService.printTransactions(username);
+    }
+
+    private static Map<String, Boolean> getAllChecqueBookRequest() {
+        return userService.getAllChecqueBookRequest();
+    }
+
+    private static void raiseChequeBookRequest(String username) {
+        userService.raiseChequeBookRequest(username);
+        System.out.println("Cheque book request is raised successfully");
+    }
+
+    private static List<String> getUserIdForChequeBookRequest() {
+        return userService.getUserIdForChequeBookRequest();
+    }
+
+    private static void approveChequeBookRequest(String userId) {
+        userService.approveChequeBookRequest(userId);
     }
 }
