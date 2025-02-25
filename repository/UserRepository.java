@@ -17,8 +17,8 @@ public class UserRepository {
     private static Map<String, Boolean> chequeBookRequest = new HashMap<>();
     static {
         User user1 = new User("admin", "admin", "1234567890", "admin", 0.0);
-        User user2 = new User("juli", "juli", "0987654321", "user", 1000.0);
-        User user3 = new User("luffy", "luffy", "0987654322", "user", 500.0);
+        User user2 = new User("user1", "user1", "0987654321", "user", 1000.0);
+        User user3 = new User("user2", "user2", "0987654322", "user", 1000.0);
         users.add(user1);
         users.add(user2);
         users.add(user3);
